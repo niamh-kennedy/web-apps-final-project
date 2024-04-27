@@ -9,5 +9,14 @@ not enough stock, item(s) are not added to cart and a message is shown to
 the user.
 
 
-Citations:
+Citations
+    Templates
+        Homepage: https://startbootstrap.com/templates/ecommerce
+        Shop pages: https://startbootstrap.com/templates/ecommerce
+        Login form: https://getbootstrap.com/docs/4.3/components/forms/
+        Registration form: https://getbootstrap.com/docs/4.3/components/forms/
+    Images    
+        Header logo: https://favicon.io/emoji-favicons/lipstick
+        Products:
+            
     

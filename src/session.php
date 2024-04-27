@@ -1,4 +1,4 @@
-/* reused code from sessions_lab */
+
 <?php
 class session
 {

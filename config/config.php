@@ -1,6 +1,9 @@
-/* reused code from sessions_lab */
 <?php
-/* Configuration for database connection */
+
+/*
+ * Configuration for database connection
+ */
+
 $host = "localhost";
 $username = "root";
 $password = "root";
