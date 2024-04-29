@@ -1,11 +1,6 @@
 <?php
 session_start();
 
-if(!isset($_SESSION['cart']) || empty($_SESSION['cart'])){
-    header("location:cart.php");
-    exit;
-}
-
 if(isset($_POST['confirm-transaction'])) {
     $orderSuccess = "Congatulations! Your order has been placed successfully. You will be notified when your order has shipped.";
     unset($_SESSION['cart']);
@@ -24,15 +19,10 @@ if(isset($_SESSION['Login'])== 'User'){
 
 try {
     require_once '../database/connect.php';
+    require_once '../queries/getUser.php';
 
     $email = $_SESSION['email'];
-
-    $sql = "SELECT * FROM users WHERE email = :email";
-    $statement = $connection->prepare($sql);
-    $statement->bindValue(':email', $email);
-    $statement->execute();
-
-    $user = $statement->fetch(PDO::FETCH_ASSOC);
+    $user = getUserByEmail($connection, $email);
 
 } catch(PDOException $error) {
     echo $sql . "<br>" . $error->getMessage();
@@ -41,7 +31,7 @@ try {
 ?>
 
     <!-- Page Title -->
-    <title>My Account</title>
+    <title>Checkout</title>
     </head>
 
     <!-- Header-->

@@ -3,8 +3,10 @@ session_start();
 
 require_once '../app/templates/header.php';
 
+require_once "../database/connect.php";
 require_once('../src/functions.php');
 $Clean = new Clean();
+$userCheck = new LoginWithDatabase();
 
 if(isset($_SESSION['Login'])== 'User'){
 
@@ -34,31 +36,16 @@ if(isset($_SESSION['Login'])== 'User'){
 
         try {
 
-            require_once "../database/connect.php";
-
             $email      = $Clean->clean($_POST['inputEmail']);
             $password   = $Clean->clean($_POST['inputPassword']);
 
-            $sql    = "SELECT * FROM users WHERE Email = '$email' AND Password = '$password'";
-            $result = $connection->prepare($sql);
-            $result->execute();
-            $row    = $result->fetch(PDO::FETCH_ASSOC);
+            $user = $userCheck->loginWithDatabase($connection, $email, $password);
 
-            if($row>0) {
-
-                $id                 = $row['id'];
-                $_SESSION['Login']  = 'User';
-                $_SESSION['email']  = $email;
-                $_SESSION['id']     = $id;
-                $_SESSION['Active'] = true;
-                $_SESSION['cartTotalQuantity'] = 0;
+            if($user === true) {
                 header("location:../public/index.php");
                 exit;
-
             } else {
-
                 $loginFailure = 'Incorrect Username or Password. Please try again.';
-
             }
 
         } catch (PDOException $error) {

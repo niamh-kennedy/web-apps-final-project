@@ -94,3 +94,27 @@ class IncreaseStock
     }
 }
 
+class LoginWithDatabase
+{
+    public function loginWithDatabase ($connection, $email, $password)
+    {
+        $sql = "SELECT * FROM users WHERE email = '$email' AND password = '$password'";
+        $statement = $connection->prepare($sql);
+        $statement->execute();
+        $result = $statement->fetch(PDO::FETCH_ASSOC);
+
+        if($result>0) {
+
+            $id = $result['id'];
+            $_SESSION['Login'] = 'User';
+            $_SESSION['email']  = $email;
+            $_SESSION['id']     = $id;
+            $_SESSION['Active'] = true;
+            $_SESSION['cartTotalQuantity'] = 0;
+
+            return true;
+        } else {
+            return false;
+        }
+    }
+}

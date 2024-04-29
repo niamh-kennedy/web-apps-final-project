@@ -7,22 +7,15 @@ require_once('../src/functions.php');
 $Clean = new Clean();
 
 if(isset($_SESSION['Login'])== 'User'){
-
     require_once '../app/templates/navbarUser.php';
-
 } elseif(isset($_SESSION['Login'])== 'Admin'){
-
     require_once '../app/templates/navbarAdmin.php';
-
 } else {
-
     require_once '../app/templates/navbar.php';
-
 }
 
 if (isset($_POST['Update'])) {
     try {
-
         require_once '../database/connect.php';
 
         $id = $_SESSION['id'];
@@ -61,7 +54,6 @@ if (isset($_POST['Update'])) {
 
 if (isset($_POST['Delete'])) {
     try {
-
         require_once '../database/connect.php';
 
         $id = $_SESSION['id'];
@@ -86,15 +78,10 @@ if (isset($_SESSION['email'])) {
     try {
 
         require_once '../database/connect.php';
+        require_once '../queries/getUser.php';
 
         $email = $_SESSION['email'];
-
-        $sql = "SELECT * FROM users WHERE email = :email";
-        $statement = $connection->prepare($sql);
-        $statement->bindValue(':email', $email);
-        $statement->execute();
-
-        $user = $statement->fetch(PDO::FETCH_ASSOC);
+        $user = getUserByEmail($connection, $email);
 
     } catch(PDOException $error) {
 
