@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection ALL */
 session_start();
 
 
@@ -53,6 +53,28 @@ if(isset($_POST['add-to-cart'])) {
                 }
             }
 
+            try {
+
+                require_once '../database/connect.php';
+
+                $lowerStock = $item["totalStock"] - $_POST['quantity'];
+
+                $product = [
+                    "sku" => $_GET["id"],
+                    "totalStock" => $lowerStock
+                ];
+
+                $sql = "UPDATE warehouse SET totalStock = :totalStock WHERE sku = :sku";
+
+                $statement = $connection->prepare($sql);
+                $statement->execute($product);
+
+            } catch (PDOException $error) {
+
+                echo $sql . "<br>" . $error->getMessage();
+
+            }
+
         } else {
             $session_array = array(
                 'sku' => $_GET["id"],
@@ -64,6 +86,28 @@ if(isset($_POST['add-to-cart'])) {
             $_SESSION['cart'][] = $session_array;
             $_SESSION['cartTotalQuantity'] += $_POST['quantity'];
             $cartUpdated = "item(s) successfully added to cart!";
+
+            try {
+
+                require_once '../database/connect.php';
+
+                $lowerStock = $item["totalStock"] - $_POST['quantity'];
+
+                $product = [
+                    "sku" => $_GET["id"],
+                    "totalStock" => $lowerStock
+                ];
+
+                $sql = "UPDATE warehouse SET totalStock = :totalStock WHERE sku = :sku";
+
+                $statement = $connection->prepare($sql);
+                $statement->execute($product);
+
+            } catch (PDOException $error) {
+
+                echo $sql . "<br>" . $error->getMessage();
+
+            }
         }
 
     } else {

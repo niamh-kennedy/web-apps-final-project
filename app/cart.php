@@ -13,6 +13,38 @@ if (isset($_GET['action'])) {
                 $_SESSION['cartTotalQuantity'] -= $value['quantity'];
                 unset($_SESSION['cart'][$key]);
             }
+
+            try {
+
+                require_once '../database/connect.php';
+
+                $id = $_GET['id'];
+
+                $sql = "SELECT * FROM warehouse WHERE sku = :id";
+                $statement = $connection->prepare($sql);
+                $statement->bindValue(':id', $id);
+                $statement->execute();
+
+                $item = $statement->fetch(PDO::FETCH_ASSOC);
+
+                $increaseStock = $item["totalStock"] + $value['quantity'];
+
+                $product = [
+                    "sku" => $_GET["id"],
+                    "totalStock" => $increaseStock
+                ];
+
+                $sql = "UPDATE warehouse SET totalStock = :totalStock WHERE sku = :sku";
+
+                $statement = $connection->prepare($sql);
+                $statement->execute($product);
+
+            } catch (PDOException $error) {
+
+                echo $sql . "<br>" . $error->getMessage();
+
+            }
+
         }
     }
 }
