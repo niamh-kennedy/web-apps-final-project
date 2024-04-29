@@ -157,15 +157,13 @@ if (isset($_SESSION['email'])) {
                         </div>
                     </div>
                 </form>
-                <form class="pt-5 py-4">
-                </form>
-                <form class="pt-5 py-4" method="post">
+                <form class="pt-5 py-2" method="post">
                     <div class="col-md-12">
-                        <h5 class="pb-xl-1"><em>Want to delete your account, <?php echo ($user["firstName"]);?>?</em></h5>
+                        <h6 class="pb-xl-1"><em>Want to delete your account, <?php echo ($user["firstName"]);?>?</em></h6>
                     </div>
                     <div class="col-md-12">
                         <div class="d-grid">
-                            <button class="btn btn-outline-dark" name="Delete" type="submit">Delete Account</button>
+                            <button class="btn btn-sm btn-outline-dark" name="Delete" type="submit">Delete Account</button>
                         </div>
                     </div>
                 </form>

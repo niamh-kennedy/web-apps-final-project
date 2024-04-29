@@ -31,7 +31,29 @@ if (isset($_GET['id'])) {
 }
 
 if(isset($_POST['add-to-cart'])) {
+    if(isset($_SESSION['cart'])){
+        $session_array_id = array_column($_SESSION['cart'], 'sku');
 
+        if(!in_array($_GET['id'], $session_array_id)) {
+            $session_array = array(
+                'sku' => $_GET["id"],
+                'productName' => $item["productName"],
+                'quantity' => $_POST["quantity"],
+                'productPrice' => $item["productPrice"]
+            );
+
+            $_SESSION['cart'][] = $session_array;
+        }
+    } else {
+        $session_array = array(
+            'sku' => $_GET["id"],
+            'productName' => $item["productName"],
+            'quantity' => $_POST["quantity"],
+            'productPrice' => $item["productPrice"]
+        );
+
+        $_SESSION['cart'][] = $session_array;
+    }
 }
 
 ?>
@@ -74,7 +96,7 @@ if(isset($_POST['add-to-cart'])) {
                             </div>
                             <!-- Product action-->
                             <div class="border-top-0 bg-transparent row-cols-4">
-                                <form class="text-left d-grid" method="post" action="">
+                                <form class="text-left d-grid" method="post" action="shop-item.php?id=<?= $item["sku"];?>">
                                     <input type="number" name="quantity" value="1" class="form-control row-cols-4">
                                     <input type="submit" name="add-to-cart" class="btn btn-outline-dark mt-sm-2" value="Add To Cart"></a>
                                 </form>
