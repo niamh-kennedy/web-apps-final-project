@@ -1,30 +1,41 @@
 <?php
 session_start();
+
 require_once '../app/templates/header.php';
 
+require_once('../src/functions.php');
+$functions = new functions();
+
 if(isset($_SESSION['Login'])== 'User'){
+
     require_once '../app/templates/navbarUser.php';
+
 } elseif(isset($_SESSION['Login'])== 'Admin'){
+
     require_once '../app/templates/navbarAdmin.php';
+
 } else {
+
     require_once '../app/templates/navbar.php';
+
 }
 
 if (isset($_POST['Update'])) {
     try {
+
         require_once '../database/connect.php';
 
         $id = $_SESSION['id'];
 
         $user =[
-            "id"        => $id,
-            "email"     => ($_POST['inputEmail']),
-            "password"  => ($_POST['inputPassword']),
-            "firstName" => ($_POST['inputFirstName']),
-            "lastName"  => ($_POST['inputLastName']),
-            "street"    => ($_POST['inputStreet']),
-            "town"      => ($_POST['inputTown']),
-            "contactNum"=> ($_POST['inputContactNum'])
+            "id"            => $id,
+            "email"         => $functions->clean($_POST['inputEmail']),
+            "password"      => $functions->clean($_POST['inputPassword']),
+            "firstName"     => $functions->clean($_POST['inputFirstName']),
+            "lastName"      => $functions->clean($_POST['inputLastName']),
+            "street"        => $functions->clean($_POST['inputStreet']),
+            "town"          => $functions->clean($_POST['inputTown']),
+            "contactNum"    => $functions->clean($_POST['inputContactNum'])
         ];
 
         $sql = "UPDATE users
@@ -40,13 +51,17 @@ if (isset($_POST['Update'])) {
 
         $statement = $connection->prepare($sql);
         $statement->execute($user);
+
     } catch (PDOException $error) {
+
         echo $sql . "<br>" . $error->getMessage();
+
     }
 }
 
 if (isset($_POST['Delete'])) {
     try {
+
         require_once '../database/connect.php';
 
         $id = $_SESSION['id'];
@@ -59,13 +74,17 @@ if (isset($_POST['Delete'])) {
 
         header("Location: logout.php");
         exit;
+
     } catch (PDOException $error) {
+
         echo $sql . "<br>" . $error->getMessage();
+
     }
 }
 
 if (isset($_SESSION['email'])) {
     try {
+
         require_once '../database/connect.php';
 
         $email = $_SESSION['email'];
@@ -78,11 +97,15 @@ if (isset($_SESSION['email'])) {
         $user = $statement->fetch(PDO::FETCH_ASSOC);
 
     } catch(PDOException $error) {
+
         echo $sql . "<br>" . $error->getMessage();
+
     }
 } else {
+
     echo "Something went wrong!";
     exit;
+
 }
 
 ?>
@@ -94,7 +117,7 @@ if (isset($_SESSION['email'])) {
     <!-- Header-->
     <header class="bg-dark py-5">
         <div class="container px-4 px-lg-5 my-5">
-            <div class="text-center text-white">
+            <div class="text-left text-white">
                 <h6 class="display-6 fw-bolder">Account Information</h6>
             </div>
         </div>
@@ -110,7 +133,7 @@ if (isset($_SESSION['email'])) {
             <div class="col-lg-6">
                 <?php if (isset($_POST['Update']) && $statement) : ?>
                     <div class="col-lg-6 pb-xl-4">
-                        <?php echo ($_POST['inputFirstName']); ?> successfully updated.
+                        <em><?php echo ($_POST['inputFirstName']); ?> successfully updated.</em>
                     </div>
                 <?php endif; ?>
                 <form method="post">
@@ -123,7 +146,7 @@ if (isset($_SESSION['email'])) {
                         </div>
                         <div class="col-md-6">
                             <label for="inputPassword">Password</label>
-                            <input name="inputPassword" type="password" class="form-control" id="inputPassword" value="******" required>
+                            <input name="inputPassword" type="password" class="form-control" id="inputPassword" value="<?php echo ($user["password"]);?>" required>
                         </div>
                     </div>
                     <h4 class="pb-xl-1">Delivery Information</h4>

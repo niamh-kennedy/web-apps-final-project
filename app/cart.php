@@ -4,21 +4,24 @@ if($_SESSION['Login'] !== 'User') {
     header("location:login.php");
     exit;
 }
-require_once '../app/templates/header.php';
-require_once '../app/templates/navbarUser.php';
-?>
 
-<?php
-if(isset($_GET['action'])) {
-    if($_GET['action'] == 'remove') {
+
+if (isset($_GET['action'])) {
+    if ($_GET['action'] == 'remove') {
         foreach ($_SESSION['cart'] as $key => $value) {
-            if($value['sku'] == $_GET['id']) {
+            if ($value['sku'] == $_GET['id']) {
+                $_SESSION['cartTotalQuantity'] -= $value['quantity'];
                 unset($_SESSION['cart'][$key]);
             }
         }
     }
 }
+
+require_once '../app/templates/header.php';
+require_once '../app/templates/navbarUser.php';
 ?>
+
+
     <!-- Page Title -->
     <title>Cart</title>
     </head>
@@ -68,6 +71,8 @@ if(isset($_GET['action'])) {
                         <?php
 
                             $total = $total + $value['productPrice'] * $value['quantity'];
+
+
                         }
                         ?>
 
@@ -78,8 +83,6 @@ if(isset($_GET['action'])) {
                             <td></td>
                         </tr>
 
-                        <?php
-                    } ?>
                 </table>
 
                 <div class="d-flex flex-row-reverse">
@@ -87,6 +90,28 @@ if(isset($_GET['action'])) {
                         <button class="btn btn-outline-dark">Complete Purchase</button>
                     </a>
                 </div>
+
+                        <?php
+                    } else { ?>
+
+                        <tr>
+                            <td class="col-md-4"></td>
+                            <td class="text-center"></td>
+                            <td class="text-center"></td>
+                            <td class="text-center"></td>
+                            <td class="text-center"></td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="2"></td>
+                            <td class="text-center"><b><em>Total Price:</em></b></td>
+                            <td class="text-center"><em>€0.00</em></td>
+                            <td></td>
+                        </tr>
+                    </table>
+                    <?php } ?>
+
+
             </div>
         </div>
     </div>

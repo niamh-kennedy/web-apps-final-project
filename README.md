@@ -10,16 +10,23 @@ the user.
 
 
 Citations
-    Templates
-        Homepage: https://startbootstrap.com/templates/ecommerce
-        Shop pages: https://startbootstrap.com/templates/ecommerce
-        Login form: https://getbootstrap.com/docs/4.3/components/forms/
-        Registration form: https://getbootstrap.com/docs/4.3/components/forms/
-        Table: https://getbootstrap.com/docs/5.0/content/tables/
-    Images    
-        Header logo: https://favicon.io/emoji-favicons/lipstick
-        Headshot:
-            Anne Hathaway for Town & Country Magazine (2019) https://anne-hathaway.org/2019/01/town-country-magazine/
-        Products:
-            
-    
+
+Templates
+
+Homepage:           https://startbootstrap.com/templates/ecommerce
+
+Shop pages:         https://startbootstrap.com/templates/ecommerce
+
+Login form:         https://getbootstrap.com/docs/4.3/components/forms/
+
+Registration form:  https://getbootstrap.com/docs/4.3/components/forms/
+
+Table:              https://getbootstrap.com/docs/5.0/content/tables/
+
+Images    
+
+Header logo:        https://favicon.io/emoji-favicons/lipstick
+
+Headshot:           Anne Hathaway for Town & Country Magazine (2019) https://anne-hathaway.org/2019/01/town-country-magazine/
+
+Products:

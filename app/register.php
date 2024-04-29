@@ -1,8 +1,13 @@
 <?php
+session_start();
+
+require_once '../app/templates/header.php';
+
 require_once('../src/functions.php');
 $functions = new functions();
-require_once '../app/templates/header.php';
+
 require_once '../app/templates/navbar.php';
+
 ?>
 
 
@@ -13,13 +18,13 @@ if(isset($_POST['Submit'])) {
         require_once "../database/connect.php";
 
         $new_user = array (
-            "firstName" => ($_POST['inputFirstName']),
-            "lastName" => ($_POST['inputLastName']),
-            "email" => ($_POST['inputEmail']),
-            "password" => ($_POST['inputPassword']),
-            "street" => ($_POST['inputStreet']),
-            "town" => ($_POST['inputTown']),
-            "contactNum" => ($_POST['inputContactNum'])
+            "firstName"     => $functions->clean($_POST['inputFirstName']),
+            "lastName"      => $functions->clean($_POST['inputLastName']),
+            "email"         => $functions->clean($_POST['inputEmail']),
+            "password"      => $functions->clean($_POST['inputPassword']),
+            "street"        => $functions->clean($_POST['inputStreet']),
+            "town"          => $functions->clean($_POST['inputTown']),
+            "contactNum"    => $functions->clean($_POST['inputContactNum'])
         );
 
         $sql = sprintf("INSERT INTO %s (%s) values (%s)", "users",
@@ -53,7 +58,7 @@ if (isset($_POST['Submit']) && $statement ) {
     <!-- Header-->
     <header class="bg-dark py-5">
         <div class="container px-4 px-lg-5 my-5">
-            <div class="text-center text-white">
+            <div class="text-left text-white">
                 <h6 class="display-6 fw-bolder">Register</h6>
             </div>
         </div>

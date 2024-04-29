@@ -32,7 +32,7 @@ try {
     <!-- Header-->
     <header class="bg-dark py-5">
         <div class="container px-4 px-lg-5 my-5">
-            <div class="text-center text-white">
+            <div class="text-left text-white">
                 <h6 class="display-6 fw-bolder">Lip Liners</h6>
             </div>
         </div>
