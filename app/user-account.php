@@ -123,32 +123,32 @@ if (isset($_SESSION['email'])) {
                         </div>
                         <div class="col-md-6">
                             <label for="inputPassword">Password</label>
-                            <input name="inputPassword" type="password" class="form-control" id="inputPassword" placeholder="******" required>
+                            <input name="inputPassword" type="password" class="form-control" id="inputPassword" value="******" required>
                         </div>
                     </div>
                     <h4 class="pb-xl-1">Delivery Information</h4>
                     <div class="row gy-3 gy-md-4 py-xl-1 pb-xl-2 overflow-hidden">
                         <div class="col-md-6">
                             <label for="inputFirstName">First Name</label>
-                            <input name="inputFirstName" type="text" class="form-control" id="inputFirstName" placeholder="<?php echo ($user["firstName"]);?>">
+                            <input name="inputFirstName" type="text" class="form-control" id="inputFirstName" value="<?php echo ($user["firstName"]);?>" required>
                         </div>
                         <div class="col-md-6">
                             <label for="inputLastName">Last Name</label>
-                            <input name="inputLastName" type="text" class="form-control" id="inputLastName" placeholder="<?php echo ($user["lastName"]);?>">
+                            <input name="inputLastName" type="text" class="form-control" id="inputLastName" value="<?php echo ($user["lastName"]);?>" required>
                         </div>
                     </div>
                     <div class="row gy-3 gy-md-4 py-xl-1 pb-xl-4 overflow-hidden">
                         <div class="col-md-4">
                             <label for="inputStreet">Street</label>
-                            <input name="inputStreet" type="text" class="form-control" id="inputStreet" placeholder="<?php echo ($user["street"]);?>">
+                            <input name="inputStreet" type="text" class="form-control" id="inputStreet" value="<?php echo ($user["street"]);?>" required>
                         </div>
                         <div class="col-md-4">
                             <label for="inputTown">Town</label>
-                            <input name="inputTown" type="text" class="form-control" id="inputTown" placeholder="<?php echo ($user["town"]);?>">
+                            <input name="inputTown" type="text" class="form-control" id="inputTown" value="<?php echo ($user["town"]);?>" required>
                         </div>
                         <div class="col-md-4">
                             <label for="inputContactNum">Contact Number</label>
-                            <input name="inputContactNum" type="text" class="form-control" id="inputContactNum" placeholder="<?php echo ($user["contactNum"]);?>">
+                            <input name="inputContactNum" type="text" class="form-control" id="inputContactNum" value="<?php echo ($user["contactNum"]);?>" required>
                         </div>
                     </div>
                     <div class="col-md-12">

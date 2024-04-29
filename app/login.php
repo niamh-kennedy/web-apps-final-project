@@ -47,7 +47,7 @@ if(isset($_SESSION['Login'])== 'User'){
                 header("location:../public/index.php");
                 exit;
             } else {
-                echo 'Incorrect Username or Password. Please try again.';
+                $loginFailure = 'Incorrect Username or Password. Please try again.';
             }
         } catch (PDOException $error) {
             echo $sql . "<br>" . $error->getMessage();
@@ -65,11 +65,17 @@ if(isset($_SESSION['Login'])== 'User'){
         </div>
     </header>
 
+
+
     <!-- Section-->
     <section class="py-5">
         <div class="container px-5 px-lg-5 mt-1 mb-5">
+            <?php if(isset($loginFailure)){ ?>
+                <div class="col mb-5">
+                    <?php echo $loginFailure; ?>
+                </div>
+            <?php } ?>
             <div class="row gx-4 gx-lg-5 row-cols-1 row-cols-md-2 row-cols-xl-4 justify-content-center">
-
                 <div class="col mb-5">
                     <!-- Login Form-->
                     <h5>Returning Customer</h5>
