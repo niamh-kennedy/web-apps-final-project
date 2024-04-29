@@ -5,45 +5,22 @@ if($_SESSION['Login'] !== 'User') {
     exit;
 }
 
+require_once '../database/connect.php';
+require_once '../src/functions.php';
+$IncreaseStock = new IncreaseStock();
+
 
 if (isset($_GET['action'])) {
     if ($_GET['action'] == 'remove') {
         foreach ($_SESSION['cart'] as $key => $value) {
             if ($value['sku'] == $_GET['id']) {
+
                 $_SESSION['cartTotalQuantity'] -= $value['quantity'];
 
-                try {
-
-                    require_once '../database/connect.php';
-
-                    $id = $_GET['id'];
-
-                    $sql = "SELECT * FROM warehouse WHERE sku = :id";
-                    $statement = $connection->prepare($sql);
-                    $statement->bindValue(':id', $id);
-                    $statement->execute();
-
-                    $item = $statement->fetch(PDO::FETCH_ASSOC);
-
-                    $increaseStock = $item["totalStock"] + $value['quantity'];
-
-                    $product = [
-                        "sku" => $_GET["id"],
-                        "totalStock" => $increaseStock
-                    ];
-
-                    $sql = "UPDATE warehouse SET totalStock = :totalStock WHERE sku = :sku";
-
-                    $statement = $connection->prepare($sql);
-                    $statement->execute($product);
-
-                } catch (PDOException $error) {
-
-                    echo $sql . "<br>" . $error->getMessage();
-
-                }
+                $IncreaseStock->increaseStock($connection, $_GET["id"], $value['quantity']);
 
                 unset($_SESSION['cart'][$key]);
+
             }
         }
     }

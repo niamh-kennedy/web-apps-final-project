@@ -1,12 +1,13 @@
 <?php /** @noinspection ALL */
 session_start();
 
+require_once '../database/connect.php';
 require_once '../src/functions.php';
 $CheckStock = new CheckStock();
+$DecreaseStock = new DecreaseStock();
 
     if (isset($_GET['id'])) {
         try {
-            require_once '../database/connect.php';
 
             $id = $_GET['id'];
 
@@ -29,6 +30,7 @@ $CheckStock = new CheckStock();
         if(isset($_SESSION['Login'])== 'User') {
 
             $checkStock = $CheckStock->checkStock($connection, $_GET["id"], $_POST["quantity"]);
+
             if($checkStock === true) {
 
                 if (isset($_SESSION['cart'])) {
@@ -58,27 +60,8 @@ $CheckStock = new CheckStock();
                         }
                     }
 
-                    try {
 
-                        require_once '../database/connect.php';
-
-                        $lowerStock = $item["totalStock"] - $_POST['quantity'];
-
-                        $product = [
-                            "sku" => $_GET["id"],
-                            "totalStock" => $lowerStock
-                        ];
-
-                        $sql = "UPDATE warehouse SET totalStock = :totalStock WHERE sku = :sku";
-
-                        $statement = $connection->prepare($sql);
-                        $statement->execute($product);
-
-                    } catch (PDOException $error) {
-
-                        echo $sql . "<br>" . $error->getMessage();
-
-                    }
+                    $DecreaseStock->decreaseStock($connection, $_GET["id"], $_POST["quantity"]);
 
                 } else {
                     $session_array = array(
@@ -92,30 +75,12 @@ $CheckStock = new CheckStock();
                     $_SESSION['cartTotalQuantity'] += $_POST['quantity'];
                     $cartUpdated = "item(s) successfully added to cart!";
 
-                    try {
 
-                        require_once '../database/connect.php';
+                    $DecreaseStock->decreaseStock($connection, $_GET["id"], $_POST["quantity"]);
 
-                        $lowerStock = $item["totalStock"] - $_POST['quantity'];
-
-                        $product = [
-                            "sku" => $_GET["id"],
-                            "totalStock" => $lowerStock
-                        ];
-
-                        $sql = "UPDATE warehouse SET totalStock = :totalStock WHERE sku = :sku";
-
-                        $statement = $connection->prepare($sql);
-                        $statement->execute($product);
-
-                    } catch (PDOException $error) {
-
-                        echo $sql . "<br>" . $error->getMessage();
-
-                    }
                 }
             } else {
-                $insufficientStock = "Insufficient stock!";
+                $insufficientStock = "Insufficient stock! " . $item["totalStock"] . " left!";
             }
 
 
