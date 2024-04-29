@@ -1,5 +1,5 @@
 <!-- Footer-->
-<footer class="py-5 bg-pink">
+<footer class="py-5 bg-dark">
     <div class="container"><p class="m-0 text-center text-white">Copyright &copy; Niamh Kennedy (B00158362) 2024</p></div>
 </footer>
 <!-- Bootstrap core JS-->

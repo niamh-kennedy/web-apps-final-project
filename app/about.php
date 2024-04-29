@@ -1,6 +1,14 @@
 <?php
+session_start();
 require_once '../app/templates/header.php';
-require_once '../app/templates/navbar.php';
+
+if(isset($_SESSION['Login'])== 'User'){
+    require_once '../app/templates/navbarUser.php';
+} elseif(isset($_SESSION['Login'])== 'Admin'){
+    require_once '../app/templates/navbarAdmin.php';
+} else {
+    require_once '../app/templates/navbar.php';
+}
 ?>
 
     <!-- Page Title -->
@@ -8,10 +16,10 @@ require_once '../app/templates/navbar.php';
     </head>
 
     <!-- Header-->
-    <header class="bg-pink py-5">
-        <div class="container px-4 px-lg-5 my-0">
-            <div class="text-left text-white">
-                <h6 class="display-6 fw-bolder">Our Founders</h6>
+    <header class="bg-dark py-5">
+        <div class="container px-4 px-lg-5 my-5">
+            <div class="text-center text-white">
+                <h6 class="display-6 fw-bolder">Our Story</h6>
             </div>
         </div>
     </header>
@@ -19,32 +27,28 @@ require_once '../app/templates/navbar.php';
     <body>
         <!-- Section-->
         <section class="py-5">
-            <div class="container px-4 px-lg-5 mt-5">
-                <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-                    <div class="col mb-5">
+            <div class="container px-4 px-lg-5 mt-1 mb-5">
+                <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-1 row-cols-xl-3 justify-content-center">
+                    <div class="col">
                         <div class="card h-100">
                             <!-- Owner headshot -->
-                            <img class="card-img-top" src="../assets/images/#" alt="..." />
+                            <img class="card-img-top" src="../assets/img/founder-headshot.jfif" alt="..." />
                             <!-- Paragraph-->
                             <div class="card-body p-4">
                                 <div class="text-center">
                                     <!-- Owner name-->
-                                    <h5 class="fw-bolder">Insert name here</h5>
-                                    <!-- Biography-->
-                                    Insert paragraph about owner here
+                                    Chariot Hillsberry
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col mb-5">
+                    <div class="col">
                         <div class="card h-100">
-                            <!-- Owner headshot -->
-                            <img class="card-img-top" src="../assets/images/#" alt="..." />
                             <!-- Paragraph-->
                             <div class="card-body p-4">
-                                <div class="text-center">
+                                <div class="text-left">
                                     <!-- Owner name-->
-                                    <h5 class="fw-bolder">Insert name here</h5>
+                                    <h5 class="fw-bolder"></h5>
                                     <!-- Biography-->
                                     Insert paragraph about owner here
                                 </div>

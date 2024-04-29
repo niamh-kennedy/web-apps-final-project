@@ -20,15 +20,23 @@
             </ul>
 
             <form class="d-flex pe-3">
-                <a class="btn btn-outline-dark" href="../app/login.php" type="submit">
+                <a class="btn btn-outline-dark" href="../app/cart.php" type="submit">
                     <i class="bi-cart-fill me-1"></i>
                     Cart
                     <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
                 </a>
             </form>
+
+            <!-- if logged in, show user profile button using $firstName and logout button
+                if not logged in, show login button -->
+            <form class="d-flex pe-3">
+                <a class="btn btn-outline-dark" href = "../app/user-account.php" type="submit">
+                    Account
+                </a>
+            </form>
             <form class="d-flex">
-                <a class="btn btn-outline-dark" href = "../app/login.php" type="submit">
-                    Login
+                <a class="btn btn-outline-dark" href = "../app/logout.php" type="submit">
+                    Logout
                 </a>
             </form>
         </div>

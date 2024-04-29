@@ -1,0 +1,179 @@
+<?php
+session_start();
+require_once '../app/templates/header.php';
+
+if(isset($_SESSION['Login'])== 'User'){
+    require_once '../app/templates/navbarUser.php';
+} elseif(isset($_SESSION['Login'])== 'Admin'){
+    require_once '../app/templates/navbarAdmin.php';
+} else {
+    require_once '../app/templates/navbar.php';
+}
+
+if (isset($_POST['Update'])) {
+    try {
+        require_once '../database/connect.php';
+
+        $id = $_SESSION['id'];
+
+        $user =[
+            "id"        => $id,
+            "email"     => ($_POST['inputEmail']),
+            "password"  => ($_POST['inputPassword']),
+            "firstName" => ($_POST['inputFirstName']),
+            "lastName"  => ($_POST['inputLastName']),
+            "street"    => ($_POST['inputStreet']),
+            "town"      => ($_POST['inputTown']),
+            "contactNum"=> ($_POST['inputContactNum'])
+        ];
+
+        $sql = "UPDATE users
+				SET id          = :id,
+					email       = :email,
+					password    = :password,
+					firstName   = :firstName,
+					lastName    = :lastName,
+					street      = :street,
+					town        = :town,
+					contactNum  = :contactNum
+				WHERE email = :email";
+
+        $statement = $connection->prepare($sql);
+        $statement->execute($user);
+    } catch (PDOException $error) {
+        echo $sql . "<br>" . $error->getMessage();
+    }
+}
+
+if (isset($_POST['Delete'])) {
+    try {
+        require_once '../database/connect.php';
+
+        $id = $_SESSION['id'];
+
+        $sql = "DELETE FROM users WHERE id = :id";
+
+        $statement = $connection->prepare($sql);
+        $statement->bindValue(':id', $id);
+        $statement->execute();
+
+        header("Location: logout.php");
+        exit;
+    } catch (PDOException $error) {
+        echo $sql . "<br>" . $error->getMessage();
+    }
+}
+
+if (isset($_SESSION['email'])) {
+    try {
+        require_once '../database/connect.php';
+
+        $email = $_SESSION['email'];
+
+        $sql = "SELECT * FROM users WHERE email = :email";
+        $statement = $connection->prepare($sql);
+        $statement->bindValue(':email', $email);
+        $statement->execute();
+
+        $user = $statement->fetch(PDO::FETCH_ASSOC);
+
+    } catch(PDOException $error) {
+        echo $sql . "<br>" . $error->getMessage();
+    }
+} else {
+    echo "Something went wrong!";
+    exit;
+}
+
+?>
+
+    <!-- Page Title -->
+    <title>My Account</title>
+    </head>
+
+    <!-- Header-->
+    <header class="bg-dark py-5">
+        <div class="container px-4 px-lg-5 my-5">
+            <div class="text-center text-white">
+                <h6 class="display-6 fw-bolder">Account Information</h6>
+            </div>
+        </div>
+    </header>
+
+<body>
+
+
+<!-- Section-->
+<section class="py-5">
+    <div class="container px-4 px-lg-5 mt-1 mb-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <?php if (isset($_POST['Update']) && $statement) : ?>
+                    <div class="col-lg-6 pb-xl-4">
+                        <?php echo ($_POST['inputFirstName']); ?> successfully updated.
+                    </div>
+                <?php endif; ?>
+                <form method="post">
+                    <h4 class="pb-xl-1">Login Credentials</h4>
+                    <div class="row gy-3 gy-md-4 py-xl-1 pb-xl-4 overflow-hidden">
+                        <div class="col-md-6">
+
+                            <label for="inputEmail">Email</label>
+                            <input name="inputEmail" type="email" class="form-control" id="inputEmail" value="<?php echo ($user["email"]);?>" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="inputPassword">Password</label>
+                            <input name="inputPassword" type="password" class="form-control" id="inputPassword" placeholder="******" required>
+                        </div>
+                    </div>
+                    <h4 class="pb-xl-1">Delivery Information</h4>
+                    <div class="row gy-3 gy-md-4 py-xl-1 pb-xl-2 overflow-hidden">
+                        <div class="col-md-6">
+                            <label for="inputFirstName">First Name</label>
+                            <input name="inputFirstName" type="text" class="form-control" id="inputFirstName" placeholder="<?php echo ($user["firstName"]);?>">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="inputLastName">Last Name</label>
+                            <input name="inputLastName" type="text" class="form-control" id="inputLastName" placeholder="<?php echo ($user["lastName"]);?>">
+                        </div>
+                    </div>
+                    <div class="row gy-3 gy-md-4 py-xl-1 pb-xl-4 overflow-hidden">
+                        <div class="col-md-4">
+                            <label for="inputStreet">Street</label>
+                            <input name="inputStreet" type="text" class="form-control" id="inputStreet" placeholder="<?php echo ($user["street"]);?>">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="inputTown">Town</label>
+                            <input name="inputTown" type="text" class="form-control" id="inputTown" placeholder="<?php echo ($user["town"]);?>">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="inputContactNum">Contact Number</label>
+                            <input name="inputContactNum" type="text" class="form-control" id="inputContactNum" placeholder="<?php echo ($user["contactNum"]);?>">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="d-grid">
+                            <button class="btn btn-outline-dark" name="Update" type="submit">Update</button>
+                        </div>
+                    </div>
+                </form>
+                <form class="pt-5 py-4">
+                </form>
+                <form class="pt-5 py-4" method="post">
+                    <div class="col-md-12">
+                        <h5 class="pb-xl-1"><em>Want to delete your account, <?php echo ($user["firstName"]);?>?</em></h5>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="d-grid">
+                            <button class="btn btn-outline-dark" name="Delete" type="submit">Delete Account</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+
+
+<?php require_once '../app/templates/footer.php'; ?>

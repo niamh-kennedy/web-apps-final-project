@@ -10,7 +10,7 @@ require_once '../app/templates/navbar.php';
 /* check if the login form has been submitted */
 if(isset($_POST['Submit'])) {
     try {
-        require_once "../config/DBconnect.php";
+        require_once "../database/connect.php";
 
         $new_user = array (
             "firstName" => ($_POST['inputFirstName']),
@@ -51,62 +51,60 @@ if (isset($_POST['Submit']) && $statement ) {
     <body>
 
     <!-- Header-->
-    <header class="bg-pink py-5">
-        <div class="container px-4 px-lg-1 my-0">
-            <div class="text-left text-white">
+    <header class="bg-dark py-5">
+        <div class="container px-4 px-lg-5 my-5">
+            <div class="text-center text-white">
                 <h6 class="display-6 fw-bolder">Register</h6>
             </div>
         </div>
     </header>
 
     <!-- Section-->
-    <section class="py-5 px-2">
-        <div class="container px-2 px-lg-5 mt-5">
-            <div class="row gx-4 gx-lg-5 row-cols-1 row-cols-md-2 row-cols-xl-3 justify-content-center">
-                <!-- Registration Form-->
-                <div class="col mb-5">
-                    <form method="post" name="registration_form" class="registration-form">
-                        <div class="form-row">
-                            <div class="form-group form-control-sm">
+    <section class="py-5 p-md-5 p-xl-5">
+        <div class="container px-5 px-lg-5">
+            <div class="row gx-4 gx-lg-3 row-cols-1 row-cols-md-2 justify-content-center">
+                <div class="flex-column py-xl-1 justify-content-between">
+                    <!-- Registration Form-->
+                    <form method="post">
+                        <h4 class="pb-xl-1">Login Credentials</h4>
+                        <div class="row gy-3 gy-md-4 py-xl-1 pb-xl-4 overflow-hidden">
+                            <div class="col-md-6">
                                 <label for="inputEmail">Email</label>
                                 <input name="inputEmail" type="email" class="form-control" id="inputEmail" placeholder="example@hotmail.com" required>
                             </div>
-                            <div class="form-group form-control-sm">
+                            <div class="col-md-6">
                                 <label for="inputPassword">Password</label>
                                 <input name="inputPassword" type="password" class="form-control" id="inputPassword" placeholder="Password" required>
                             </div>
                         </div>
-                        <div class="form-row">
-                            <div class="form-group form-control-sm">
+                        <h4 class="pb-xl-1">Delivery Information</h4>
+                        <div class="row gy-3 gy-md-4 py-xl-1 pb-xl-2 overflow-hidden">
+                            <div class="col-md-6">
                                 <label for="inputFirstName">First Name</label>
                                 <input name="inputFirstName" type="text" class="form-control" id="inputFirstName" placeholder="First Name">
                             </div>
-                            <div class="form-group form-control-sm">
+                            <div class="col-md-6">
                                 <label for="inputLastName">Last Name</label>
                                 <input name="inputLastName" type="text" class="form-control" id="inputLastName" placeholder="Last Name">
                             </div>
                         </div>
-                        <div class="form-row form-check-inline">
-                            <div class="form-group form-control-sm">
+                        <div class="row gy-3 gy-md-4 py-xl-1 pb-xl-4 overflow-hidden">
+                            <div class="col-md-4">
                                 <label for="inputStreet">Street</label>
                                 <input name="inputStreet" type="text" class="form-control" id="inputStreet" placeholder="Street">
                             </div>
-                        </div>
-                        <div class="form-row form-check-inline">
-                            <div class="form-group form-control-sm">
+                            <div class="col-md-4">
                                 <label for="inputTown">Town</label>
                                 <input name="inputTown" type="text" class="form-control" id="inputTown" placeholder="Town">
                             </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group form-check-inline form-control-sm">
+                            <div class="col-md-4">
                                 <label for="inputContactNum">Contact Number</label>
                                 <input name="inputContactNum" type="text" class="form-control" id="inputContactNum" placeholder="012 345 6789">
                             </div>
                         </div>
-                        <div class="form-row form-check-inline">
-                            <div class="form-group form-control-lg">
-                            <button class="btn btn-primary" name="Submit" value="Register" type="submit">Register</button>
+                        <div class="col-md-12">
+                            <div class="d-grid">
+                                <button class="btn btn-outline-dark" name="Submit" type="submit">Register</button>
                             </div>
                         </div>
                     </form>
