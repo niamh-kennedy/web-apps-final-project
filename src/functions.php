@@ -1,7 +1,7 @@
 <?php
 
 /* reused code from sessions_lab */
-class functions
+class Clean
 {
     function clean ($data)
     {
@@ -11,35 +11,28 @@ class functions
         return $data;
     }
 
-    function checkStock ($id, $quantity)
+}
+
+// database checks
+class CheckStock
+{
+    public function checkStock ($connection, $id, $num)
     {
         try {
 
-            require_once '../database/connect.php';
-
-            $sql = "SELECT * FROM warehouse WHERE sku = :id";
-            $statement = $connection->prepare($sql);
-            $statement->bindValue(':id', $id);
+            $statement = $connection->prepare("SELECT * FROM warehouse WHERE sku = :id");
+            $statement->bindParam(":id", $id);
             $statement->execute();
+            $result = $statement->fetch(pdo::FETCH_ASSOC);
 
-            $item = $statement->fetch(PDO::FETCH_ASSOC);
-
-            $lowerStock = $item["totalStock"] - $_POST['quantity'];
-
-            $product = [
-                "sku" => $_GET["id"],
-                "totalStock" => $lowerStock
-            ];
-
-            $sql = "UPDATE warehouse SET totalStock = :totalStock WHERE sku = :sku";
-
-            $statement = $connection->prepare($sql);
-            $statement->execute($product);
-
-        } catch (PDOException $error) {
-
-            echo $sql . "<br>" . $error->getMessage();
-
+            if ($result['totalStock'] >= $num) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
         }
     }
 }
+

@@ -4,7 +4,7 @@ session_start();
 require_once '../app/templates/header.php';
 
 require_once('../src/functions.php');
-$functions = new functions();
+$Clean = new Clean();
 
 if(isset($_SESSION['Login'])== 'User'){
 
@@ -36,8 +36,8 @@ if(isset($_SESSION['Login'])== 'User'){
 
             require_once "../database/connect.php";
 
-            $email      = $functions->clean($_POST['inputEmail']);
-            $password   = $functions->clean($_POST['inputPassword']);
+            $email      = $Clean->clean($_POST['inputEmail']);
+            $password   = $Clean->clean($_POST['inputPassword']);
 
             $sql    = "SELECT * FROM users WHERE Email = '$email' AND Password = '$password'";
             $result = $connection->prepare($sql);

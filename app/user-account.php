@@ -4,7 +4,7 @@ session_start();
 require_once '../app/templates/header.php';
 
 require_once('../src/functions.php');
-$functions = new functions();
+$Clean = new Clean();
 
 if(isset($_SESSION['Login'])== 'User'){
 
@@ -29,13 +29,13 @@ if (isset($_POST['Update'])) {
 
         $user =[
             "id"            => $id,
-            "email"         => $functions->clean($_POST['inputEmail']),
-            "password"      => $functions->clean($_POST['inputPassword']),
-            "firstName"     => $functions->clean($_POST['inputFirstName']),
-            "lastName"      => $functions->clean($_POST['inputLastName']),
-            "street"        => $functions->clean($_POST['inputStreet']),
-            "town"          => $functions->clean($_POST['inputTown']),
-            "contactNum"    => $functions->clean($_POST['inputContactNum'])
+            "email"         => $Clean->clean($_POST['inputEmail']),
+            "password"      => $Clean->clean($_POST['inputPassword']),
+            "firstName"     => $Clean->clean($_POST['inputFirstName']),
+            "lastName"      => $Clean->clean($_POST['inputLastName']),
+            "street"        => $Clean->clean($_POST['inputStreet']),
+            "town"          => $Clean->clean($_POST['inputTown']),
+            "contactNum"    => $Clean->clean($_POST['inputContactNum'])
         ];
 
         $sql = "UPDATE users

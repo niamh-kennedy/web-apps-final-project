@@ -1,132 +1,144 @@
 <?php /** @noinspection ALL */
 session_start();
 
+require_once '../src/functions.php';
+$CheckStock = new CheckStock();
 
-if (isset($_GET['id'])) {
-    try {
-        require_once '../database/connect.php';
+    if (isset($_GET['id'])) {
+        try {
+            require_once '../database/connect.php';
 
-        $id = $_GET['id'];
+            $id = $_GET['id'];
 
-        $sql = "SELECT * FROM warehouse WHERE sku = :id";
-        $statement = $connection->prepare($sql);
-        $statement->bindValue(':id', $id);
-        $statement->execute();
+            $sql = "SELECT * FROM warehouse WHERE sku = :id";
+            $statement = $connection->prepare($sql);
+            $statement->bindValue(':id', $id);
+            $statement->execute();
 
-        $item = $statement->fetch(PDO::FETCH_ASSOC);
-    } catch(PDOException $error) {
-        echo $sql . "<br>" . $error->getMessage();
+            $item = $statement->fetch(PDO::FETCH_ASSOC);
+        } catch(PDOException $error) {
+            echo $sql . "<br>" . $error->getMessage();
+        }
+    } else {
+        echo "Something went wrong!";
+        exit;
     }
-} else {
-    echo "Something went wrong!";
-    exit;
-}
 
-if(isset($_POST['add-to-cart'])) {
+    if(isset($_POST['add-to-cart'])) {
 
-    if(isset($_SESSION['Login'])== 'User') {
+        if(isset($_SESSION['Login'])== 'User') {
 
-        if (isset($_SESSION['cart'])) {
+            $checkStock = $CheckStock->checkStock($connection, $_GET["id"], $_POST["quantity"]);
+            if($checkStock === true) {
 
-            $session_array_id = array_column($_SESSION['cart'], 'sku');
+                if (isset($_SESSION['cart'])) {
 
-            if (!in_array($_GET['id'], $session_array_id)) {
-                $session_array = array(
-                    'sku' => $_GET["id"],
-                    'productName' => $item["productName"],
-                    'quantity' => $_POST["quantity"],
-                    'productPrice' => $item["productPrice"]
-                );
+                    $session_array_id = array_column($_SESSION['cart'], 'sku');
 
-                $_SESSION['cart'][] = $session_array;
-                $_SESSION['cartTotalQuantity'] += $_POST['quantity'];
-                $cartUpdated = "item(s) successfully added to cart!";
+                    if (!in_array($_GET['id'], $session_array_id)) {
+                        $session_array = array(
+                            'sku' => $_GET["id"],
+                            'productName' => $item["productName"],
+                            'quantity' => $_POST["quantity"],
+                            'productPrice' => $item["productPrice"]
+                        );
 
-            } else {
-                foreach ($_SESSION['cart'] as &$key) {
-                    if ($key["sku"] == $_GET["id"]) {
-                        $key['quantity'] += $_POST["quantity"];
-                        $_SESSION['cartTotalQuantity'] += $_POST["quantity"];
+                        $_SESSION['cart'][] = $session_array;
+                        $_SESSION['cartTotalQuantity'] += $_POST['quantity'];
                         $cartUpdated = "item(s) successfully added to cart!";
-                        break;
+
+                    } else {
+                        foreach ($_SESSION['cart'] as &$key) {
+                            if ($key["sku"] == $_GET["id"]) {
+                                $key['quantity'] += $_POST["quantity"];
+                                $_SESSION['cartTotalQuantity'] += $_POST["quantity"];
+                                $cartUpdated = "item(s) successfully added to cart!";
+                                break;
+                            }
+                        }
+                    }
+
+                    try {
+
+                        require_once '../database/connect.php';
+
+                        $lowerStock = $item["totalStock"] - $_POST['quantity'];
+
+                        $product = [
+                            "sku" => $_GET["id"],
+                            "totalStock" => $lowerStock
+                        ];
+
+                        $sql = "UPDATE warehouse SET totalStock = :totalStock WHERE sku = :sku";
+
+                        $statement = $connection->prepare($sql);
+                        $statement->execute($product);
+
+                    } catch (PDOException $error) {
+
+                        echo $sql . "<br>" . $error->getMessage();
+
+                    }
+
+                } else {
+                    $session_array = array(
+                        'sku' => $_GET["id"],
+                        'productName' => $item["productName"],
+                        'quantity' => $_POST["quantity"],
+                        'productPrice' => $item["productPrice"]
+                    );
+
+                    $_SESSION['cart'][] = $session_array;
+                    $_SESSION['cartTotalQuantity'] += $_POST['quantity'];
+                    $cartUpdated = "item(s) successfully added to cart!";
+
+                    try {
+
+                        require_once '../database/connect.php';
+
+                        $lowerStock = $item["totalStock"] - $_POST['quantity'];
+
+                        $product = [
+                            "sku" => $_GET["id"],
+                            "totalStock" => $lowerStock
+                        ];
+
+                        $sql = "UPDATE warehouse SET totalStock = :totalStock WHERE sku = :sku";
+
+                        $statement = $connection->prepare($sql);
+                        $statement->execute($product);
+
+                    } catch (PDOException $error) {
+
+                        echo $sql . "<br>" . $error->getMessage();
+
                     }
                 }
+            } else {
+                $insufficientStock = "Insufficient stock!";
             }
 
-            try {
-
-                require_once '../database/connect.php';
-
-                $lowerStock = $item["totalStock"] - $_POST['quantity'];
-
-                $product = [
-                    "sku" => $_GET["id"],
-                    "totalStock" => $lowerStock
-                ];
-
-                $sql = "UPDATE warehouse SET totalStock = :totalStock WHERE sku = :sku";
-
-                $statement = $connection->prepare($sql);
-                $statement->execute($product);
-
-            } catch (PDOException $error) {
-
-                echo $sql . "<br>" . $error->getMessage();
-
-            }
 
         } else {
-            $session_array = array(
-                'sku' => $_GET["id"],
-                'productName' => $item["productName"],
-                'quantity' => $_POST["quantity"],
-                'productPrice' => $item["productPrice"]
-            );
 
-            $_SESSION['cart'][] = $session_array;
-            $_SESSION['cartTotalQuantity'] += $_POST['quantity'];
-            $cartUpdated = "item(s) successfully added to cart!";
+            header("location:login.php");
+            exit;
 
-            try {
-
-                require_once '../database/connect.php';
-
-                $lowerStock = $item["totalStock"] - $_POST['quantity'];
-
-                $product = [
-                    "sku" => $_GET["id"],
-                    "totalStock" => $lowerStock
-                ];
-
-                $sql = "UPDATE warehouse SET totalStock = :totalStock WHERE sku = :sku";
-
-                $statement = $connection->prepare($sql);
-                $statement->execute($product);
-
-            } catch (PDOException $error) {
-
-                echo $sql . "<br>" . $error->getMessage();
-
-            }
         }
 
-    } else {
-
-        header("location:login.php");
-        exit;
+        unset($_POST['add-to-cart']);
 
     }
-}
 
-require_once '../app/templates/header.php';
+    require_once '../app/templates/header.php';
 
-if(isset($_SESSION['Login'])== 'User'){
-    require_once '../app/templates/navbarUser.php';
-} elseif(isset($_SESSION['Login'])== 'Admin'){
-    require_once '../app/templates/navbarAdmin.php';
-} else {
-    require_once '../app/templates/navbar.php';
-}
+    if(isset($_SESSION['Login'])== 'User'){
+        require_once '../app/templates/navbarUser.php';
+    } elseif(isset($_SESSION['Login'])== 'Admin'){
+        require_once '../app/templates/navbarAdmin.php';
+    } else {
+        require_once '../app/templates/navbar.php';
+    }
 
 ?>
 
@@ -152,6 +164,14 @@ if(isset($_SESSION['Login'])== 'User'){
                 <div class="pt-0 mb-3">
                     <?php
                         echo $_POST["quantity"] . " " . $cartUpdated;
+                    ?>
+                </div>
+            <?php } ?>
+            <?php
+            if(isset($insufficientStock)) { ?>
+                <div class="pt-0 mb-3">
+                    <?php
+                        echo $insufficientStock;
                     ?>
                 </div>
             <?php } ?>

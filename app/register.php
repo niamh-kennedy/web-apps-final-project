@@ -4,7 +4,7 @@ session_start();
 require_once '../app/templates/header.php';
 
 require_once('../src/functions.php');
-$functions = new functions();
+$Clean = new Clean();
 
 require_once '../app/templates/navbar.php';
 
@@ -18,13 +18,13 @@ if(isset($_POST['Submit'])) {
         require_once "../database/connect.php";
 
         $new_user = array (
-            "firstName"     => $functions->clean($_POST['inputFirstName']),
-            "lastName"      => $functions->clean($_POST['inputLastName']),
-            "email"         => $functions->clean($_POST['inputEmail']),
-            "password"      => $functions->clean($_POST['inputPassword']),
-            "street"        => $functions->clean($_POST['inputStreet']),
-            "town"          => $functions->clean($_POST['inputTown']),
-            "contactNum"    => $functions->clean($_POST['inputContactNum'])
+            "firstName"     => $Clean->clean($_POST['inputFirstName']),
+            "lastName"      => $Clean->clean($_POST['inputLastName']),
+            "email"         => $Clean->clean($_POST['inputEmail']),
+            "password"      => $Clean->clean($_POST['inputPassword']),
+            "street"        => $Clean->clean($_POST['inputStreet']),
+            "town"          => $Clean->clean($_POST['inputTown']),
+            "contactNum"    => $Clean->clean($_POST['inputContactNum'])
         );
 
         $sql = sprintf("INSERT INTO %s (%s) values (%s)", "users",
