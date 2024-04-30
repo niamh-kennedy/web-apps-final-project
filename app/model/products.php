@@ -59,7 +59,7 @@
 
         try {
 
-            $sql = "DELETE FROM warehouse WHERE id = :id";
+            $sql = "DELETE FROM warehouse WHERE sku = :id";
             $statement = $connection->prepare($sql);
             $statement->bindParam(':id', $id);
             $statement->execute();
@@ -72,14 +72,27 @@
 
     }
 
-    function createProduct ($connection, $id) {
+    function createProduct ($connection, $productName, $productCategory, $productDesc, $productPrice, $totalStock) {
 
         try {
 
-            $sql = "SELECT * FROM warehouse WHERE id = :id";
+            $new_product = array (
+                "productName" => $productName,
+                "productCategory" => $productCategory,
+                "productDesc" => $productDesc,
+                "productPrice" => $productPrice,
+                "totalStock" => $totalStock
+            );
+
+            $sql = sprintf("INSERT INTO %s (%s) values (%s)", "warehouse",
+                implode(", ", array_keys($new_product)),
+                ":" . implode(", :", array_keys($new_product)),
+                ":" . implode(", :", array_keys($new_product)),
+                ":" . implode(", :", array_keys($new_product)),
+                ":" . implode(", :", array_keys($new_product)));
+
             $statement = $connection->prepare($sql);
-            $statement->bindParam(':id', $id);
-            $statement->execute();
+            $statement->execute($new_product);
 
             return $statement->fetchAll();
 

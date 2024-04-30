@@ -64,16 +64,10 @@ if (isset($_POST['Delete'])) {
 }
 
 if (isset($_SESSION['email'])) {
-    try {
 
         $email = $_SESSION['email'];
         $user = getUserByEmail($connection, $email);
 
-    } catch(PDOException $error) {
-
-        echo $sql . "<br>" . $error->getMessage();
-
-    }
 } else {
 
     echo "Something went wrong!";

@@ -6,11 +6,11 @@
     require_once '../app/model/products.php';
     require_once '../database/connect.php';
 
-    if(isset($_SESSION['Login'])== 'User'){
+    if(isset($_SESSION['Login']) && ($_SESSION['Login']) == 'User'){
 
         require_once '../app/view/templates/navbarUser.php';
 
-    } elseif(isset($_SESSION['Login'])== 'Admin'){
+    } elseif(isset($_SESSION['Login']) && ($_SESSION['Login']) == 'Admin'){
 
         require_once '../app/view/templates/navbarAdmin.php';
 
