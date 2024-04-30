@@ -1,53 +1,52 @@
 <?php
-session_start();
+    session_start();
 
-require_once '../app/templates/header.php';
+    require_once '../app/view/templates/header.php';
+    require_once '../app/model/products.php';
+    require_once '../app/model/users.php';
+    require_once '../src/functions.php';
+    require_once '../database/connect.php';
 
-require_once('../src/functions.php');
-$Clean = new Clean();
+    if(isset($_SESSION['Login'])== 'User'){
 
-require_once '../app/templates/navbar.php';
+        require_once '../app/view/templates/navbarUser.php';
 
-?>
+    } elseif(isset($_SESSION['Login'])== 'Admin'){
 
+        require_once '../app/view/templates/navbarAdmin.php';
 
-<?php
-/* check if the login form has been submitted */
-if(isset($_POST['Submit'])) {
-    try {
-        require_once "../database/connect.php";
+    } else {
 
-        $new_user = array (
-            "firstName"     => $Clean->clean($_POST['inputFirstName']),
-            "lastName"      => $Clean->clean($_POST['inputLastName']),
-            "email"         => $Clean->clean($_POST['inputEmail']),
-            "password"      => $Clean->clean($_POST['inputPassword']),
-            "street"        => $Clean->clean($_POST['inputStreet']),
-            "town"          => $Clean->clean($_POST['inputTown']),
-            "contactNum"    => $Clean->clean($_POST['inputContactNum'])
-        );
+        require_once '../app/view/templates/navbar.php';
 
-        $sql = sprintf("INSERT INTO %s (%s) values (%s)", "users",
-            implode(", ", array_keys($new_user)),
-            ":" . implode(", :", array_keys($new_user)),
-            ":" . implode(", :", array_keys($new_user)),
-            ":" . implode(", :", array_keys($new_user)),
-            ":" . implode(", :", array_keys($new_user)),
-            ":" . implode(", :", array_keys($new_user)),
-            ":" . implode(", :", array_keys($new_user)));
-
-        $statement = $connection->prepare($sql);
-        $statement->execute($new_user);
-    } catch (PDOException $error) {
-        echo $sql . "<br>" . $error->getMessage();
     }
-}
 
-/* check if the login form has been submitted */
-if (isset($_POST['Submit']) && $statement ) {
-    header("location:login.php");
-    exit;
-}
+    /* check if the login form has been submitted */
+    if(isset($_POST['Submit'])) {
+        try {
+
+            $email = clean($_POST['inputEmail']);
+            $password = clean($_POST['inputPassword']);
+            $firstName = clean($_POST['inputFirstName']);
+            $lastName = clean($_POST['inputLastName']);
+            $street = clean($_POST['inputStreet']);
+            $town = clean($_POST['inputTown']);
+            $contactNum = clean($_POST['inputContactNum']);
+
+            createUser($connection, $email, $password, $firstName, $lastName, $street, $town, $contactNum);
+
+            $userCreated = "success";
+        } catch (PDOException $error) {
+            echo $sql . "<br>" . $error->getMessage();
+        }
+    }
+
+    /* check if the login form has been submitted */
+    if (isset($_POST['Submit']) && $userCreated ) {
+        header("location:index.php?action=login");
+        exit;
+    }
+
 ?>
 
     <!-- Page Title -->
@@ -118,4 +117,4 @@ if (isset($_POST['Submit']) && $statement ) {
         </div>
     </section>
 
-<?php require_once '../app/templates/footer.php'; ?>
+<?php require_once '../app/view/templates/footer.php'; ?>

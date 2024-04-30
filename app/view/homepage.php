@@ -20,22 +20,21 @@
 
     }
 
-    $result = getProductsByCategory($connection, "lipstick");
+    $result = getProductsByCategory($connection, "lipliner");
 
 ?>
-
-    <!-- Page Title -->
-    <title>Shop</title>
+        <!-- Page Title -->
+        <title>Home</title>
     </head>
+
     <body>
 
     <!-- Header-->
     <header class="bg-dark py-5">
         <div class="container px-4 px-lg-5 my-5">
             <div class="text-left text-white">
-                <h6 class="display-6 fw-bolder">Lipsticks</h6>
+                <h6 class="display-6 fw-bolder">Featured Products</h6>
             </div>
-        </div>
     </header>
 
     <!-- Section-->
@@ -67,6 +66,5 @@
         </div>
     </section>
 
-
-
+<!-- Footer-->
 <?php require_once '../app/view/templates/footer.php'; ?>

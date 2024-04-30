@@ -1,49 +1,43 @@
 <?php
-session_start();
 
-require_once '../app/templates/header.php';
+    session_start();
 
-require_once('../src/functions.php');
-$Clean = new Clean();
+    require_once '../app/view/templates/header.php';
+    require_once '../app/model/users.php';
+    require_once('../src/functions.php');
+    require_once('../src/session.php');
+    require_once '../database/connect.php';
 
-if(isset($_SESSION['Login'])== 'User'){
-    require_once '../app/templates/navbarUser.php';
-} elseif(isset($_SESSION['Login'])== 'Admin'){
-    require_once '../app/templates/navbarAdmin.php';
-} else {
-    require_once '../app/templates/navbar.php';
-}
+    if(isset($_SESSION['Login'])== 'User'){
+
+        require_once '../app/view/templates/navbarUser.php';
+
+    } elseif(isset($_SESSION['Login'])== 'Admin'){
+
+        require_once '../app/view/templates/navbarAdmin.php';
+
+    } else {
+
+        require_once '../app/view/templates/navbar.php';
+
+    }
 
 if (isset($_POST['Update'])) {
     try {
-        require_once '../database/connect.php';
 
         $id = $_SESSION['id'];
 
-        $user =[
-            "id"            => $id,
-            "email"         => $Clean->clean($_POST['inputEmail']),
-            "password"      => $Clean->clean($_POST['inputPassword']),
-            "firstName"     => $Clean->clean($_POST['inputFirstName']),
-            "lastName"      => $Clean->clean($_POST['inputLastName']),
-            "street"        => $Clean->clean($_POST['inputStreet']),
-            "town"          => $Clean->clean($_POST['inputTown']),
-            "contactNum"    => $Clean->clean($_POST['inputContactNum'])
-        ];
+        $email = clean($_POST['inputEmail']);
+        $password = clean($_POST['inputPassword']);
+        $firstName = clean($_POST['inputFirstName']);
+        $lastName = clean($_POST['inputLastName']);
+        $street = clean($_POST['inputStreet']);
+        $town = clean($_POST['inputTown']);
+        $contactNum = clean($_POST['inputContactNum']);
 
-        $sql = "UPDATE users
-				SET id          = :id,
-					email       = :email,
-					password    = :password,
-					firstName   = :firstName,
-					lastName    = :lastName,
-					street      = :street,
-					town        = :town,
-					contactNum  = :contactNum
-				WHERE email = :email";
+        updateUser($connection, $id, $email, $password, $firstName, $lastName, $street, $town, $contactNum);
 
-        $statement = $connection->prepare($sql);
-        $statement->execute($user);
+        $userUpdated = "User updated successfully";
 
     } catch (PDOException $error) {
 
@@ -54,18 +48,13 @@ if (isset($_POST['Update'])) {
 
 if (isset($_POST['Delete'])) {
     try {
-        require_once '../database/connect.php';
 
         $id = $_SESSION['id'];
 
-        $sql = "DELETE FROM users WHERE id = :id";
+        deleteUser($connection, $id);
 
-        $statement = $connection->prepare($sql);
-        $statement->bindValue(':id', $id);
-        $statement->execute();
-
-        header("Location: logout.php");
-        exit;
+        $session = new session();
+        $session->forgetSession();
 
     } catch (PDOException $error) {
 
@@ -76,9 +65,6 @@ if (isset($_POST['Delete'])) {
 
 if (isset($_SESSION['email'])) {
     try {
-
-        require_once '../database/connect.php';
-        require_once '../queries/getUser.php';
 
         $email = $_SESSION['email'];
         $user = getUserByEmail($connection, $email);
@@ -118,7 +104,7 @@ if (isset($_SESSION['email'])) {
     <div class="container px-4 px-lg-5 mt-1 mb-5">
         <div class="row justify-content-center">
             <div class="col-lg-6">
-                <?php if (isset($_POST['Update']) && $statement) : ?>
+                <?php if (isset($_POST['Update']) && $userUpdated) : ?>
                     <div class="col-lg-6 pb-xl-4">
                         <em><?php echo ($_POST['inputFirstName']); ?> successfully updated.</em>
                     </div>
@@ -184,4 +170,4 @@ if (isset($_SESSION['email'])) {
 </body>
 
 
-<?php require_once '../app/templates/footer.php'; ?>
+<?php require_once '../app/view/templates/footer.php'; ?>

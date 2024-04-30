@@ -1,27 +1,27 @@
 <?php
-session_start();
-require_once '../app/templates/header.php';
 
-if(isset($_SESSION['Login'])== 'User'){
-    require_once '../app/templates/navbarUser.php';
-} elseif(isset($_SESSION['Login'])== 'Admin'){
-    require_once '../app/templates/navbarAdmin.php';
-} else {
-    require_once '../app/templates/navbar.php';
-}
+    session_start();
 
-try {
+    require_once '../app/view/templates/header.php';
+    require_once '../app/model/products.php';
     require_once '../database/connect.php';
 
-    $sql = "SELECT * FROM warehouse WHERE productCategory = 'lipgloss'";
+    if(isset($_SESSION['Login'])== 'User'){
 
-    $statement = $connection->prepare($sql);
-    $statement->execute();
+        require_once '../app/view/templates/navbarUser.php';
 
-    $result = $statement->fetchAll();
-} catch (PDOException $error) {
-    echo $sql . "<br>" . error->getMessage();
-}
+    } elseif(isset($_SESSION['Login'])== 'Admin'){
+
+        require_once '../app/view/templates/navbarAdmin.php';
+
+    } else {
+
+        require_once '../app/view/templates/navbar.php';
+
+    }
+
+    $result = getProductsByCategory($connection, "lipgloss");
+
 ?>
 
     <!-- Page Title -->
@@ -58,7 +58,7 @@ try {
                             </div>
                             <!-- Product actions-->
                             <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="../app/shop-item.php?id=<?php echo $row["sku"];?>">View Product</a></div>
+                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="index.php?action=shop_item&id=<?php echo $row['sku'];?>">View Product</a></div>
                             </div>
                         </div>
                     </div>
@@ -70,4 +70,4 @@ try {
 
 
 
-<?php require_once '../app/templates/footer.php'; ?>
+<?php require_once '../app/view/templates/footer.php'; ?>

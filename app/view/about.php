@@ -1,14 +1,24 @@
 <?php
-session_start();
-require_once '../app/templates/header.php';
 
-if(isset($_SESSION['Login'])== 'User'){
-    require_once '../app/templates/navbarUser.php';
-} elseif(isset($_SESSION['Login'])== 'Admin'){
-    require_once '../app/templates/navbarAdmin.php';
-} else {
-    require_once '../app/templates/navbar.php';
-}
+    session_start();
+
+    require_once '../app/view/templates/header.php';
+
+
+    if(isset($_SESSION['Login'])== 'User'){
+
+        require_once '../app/view/templates/navbarUser.php';
+
+    } elseif(isset($_SESSION['Login'])== 'Admin'){
+
+        require_once '../app/view/templates/navbarAdmin.php';
+
+    } else {
+
+        require_once '../app/view/templates/navbar.php';
+
+    }
+
 ?>
 
     <!-- Page Title -->
@@ -25,6 +35,7 @@ if(isset($_SESSION['Login'])== 'User'){
     </header>
 
     <body>
+
         <!-- Section-->
         <section class="py-5">
             <div class="container px-4 px-lg-5 mt-1 mb-5">
@@ -58,7 +69,8 @@ if(isset($_SESSION['Login'])== 'User'){
                 </div>
             </div>
         </section>
+
     </body>
 
 
-<?php require_once '../app/templates/footer.php'; ?>
+<?php require_once '../app/view/templates/footer.php'; ?>

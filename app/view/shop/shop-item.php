@@ -1,45 +1,28 @@
-<?php /** @noinspection ALL */
-session_start();
+<?php
 
-require_once '../database/connect.php';
-require_once '../src/functions.php';
-$CheckStock = new CheckStock();
-$DecreaseStock = new DecreaseStock();
+    session_start();
 
-    if (isset($_GET['id'])) {
-        try {
+    require_once '../app/model/products.php';
+    require_once '../database/connect.php';
 
-            $id = $_GET['id'];
-
-            $sql = "SELECT * FROM warehouse WHERE sku = :id";
-            $statement = $connection->prepare($sql);
-            $statement->bindValue(':id', $id);
-            $statement->execute();
-
-            $item = $statement->fetch(PDO::FETCH_ASSOC);
-        } catch(PDOException $error) {
-            echo $sql . "<br>" . $error->getMessage();
-        }
-    } else {
-        echo "Something went wrong!";
-        exit;
-    }
+    $id = $_GET['id'];
+    $item = getProductBySKU($connection, $id);
 
     if(isset($_POST['add-to-cart'])) {
 
         if(isset($_SESSION['Login'])== 'User') {
 
-            $checkStock = $CheckStock->checkStock($connection, $_GET["id"], $_POST["quantity"]);
+            $inStock = checkStock($connection, $id, $_POST["quantity"]);
 
-            if($checkStock === true) {
+            if($inStock === true) {
 
                 if (isset($_SESSION['cart'])) {
 
                     $session_array_id = array_column($_SESSION['cart'], 'sku');
 
-                    if (!in_array($_GET['id'], $session_array_id)) {
+                    if (!in_array($id, $session_array_id)) {
                         $session_array = array(
-                            'sku' => $_GET["id"],
+                            'sku' => $id,
                             'productName' => $item["productName"],
                             'quantity' => $_POST["quantity"],
                             'productPrice' => $item["productPrice"]
@@ -51,7 +34,7 @@ $DecreaseStock = new DecreaseStock();
 
                     } else {
                         foreach ($_SESSION['cart'] as &$key) {
-                            if ($key["sku"] == $_GET["id"]) {
+                            if ($key["sku"] == $id) {
                                 $key['quantity'] += $_POST["quantity"];
                                 $_SESSION['cartTotalQuantity'] += $_POST["quantity"];
                                 $cartUpdated = "item(s) successfully added to cart!";
@@ -61,11 +44,12 @@ $DecreaseStock = new DecreaseStock();
                     }
 
 
-                    $DecreaseStock->decreaseStock($connection, $_GET["id"], $_POST["quantity"]);
+                    decreaseStock($connection, $id, $_POST["quantity"]);
 
                 } else {
+
                     $session_array = array(
-                        'sku' => $_GET["id"],
+                        'sku' => $id,
                         'productName' => $item["productName"],
                         'quantity' => $_POST["quantity"],
                         'productPrice' => $item["productPrice"]
@@ -76,17 +60,20 @@ $DecreaseStock = new DecreaseStock();
                     $cartUpdated = "item(s) successfully added to cart!";
 
 
-                    $DecreaseStock->decreaseStock($connection, $_GET["id"], $_POST["quantity"]);
+                    decreaseStock($connection, $id, $_POST["quantity"]);
 
                 }
+
             } else {
-                $insufficientStock = "Insufficient stock! " . $item["totalStock"] . " left!";
+
+                $insufficientStock = "Insufficient stock. " . $item["totalStock"] . " left!";
+
             }
 
 
         } else {
 
-            header("location:login.php");
+            header("location:index.php?action=login");
             exit;
 
         }
@@ -95,14 +82,20 @@ $DecreaseStock = new DecreaseStock();
 
     }
 
-    require_once '../app/templates/header.php';
+    require_once '../app/view/templates/header.php';
 
     if(isset($_SESSION['Login'])== 'User'){
-        require_once '../app/templates/navbarUser.php';
+
+        require_once '../app/view/templates/navbarUser.php';
+
     } elseif(isset($_SESSION['Login'])== 'Admin'){
-        require_once '../app/templates/navbarAdmin.php';
+
+        require_once '../app/view/templates/navbarAdmin.php';
+
     } else {
-        require_once '../app/templates/navbar.php';
+
+        require_once '../app/view/templates/navbar.php';
+
     }
 
 ?>
@@ -143,7 +136,7 @@ $DecreaseStock = new DecreaseStock();
 
                 <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
                     <div class="col mb-5">
-                        <div class="card h-100 text-center">
+                        <div class="card h-150 text-center">
                             <!-- Product image-->
                             <img class="card-img" src="../assets/img/product-<?php echo $item["sku"];?>.jpeg" alt="..." />
                         </div>
@@ -161,10 +154,10 @@ $DecreaseStock = new DecreaseStock();
                                     <p><?php echo ($item["productDesc"]); ?></p>
                                 </div>
                                 <!-- Product action-->
-                                <div class="border-top-0 bg-transparent row-cols-4">
-                                    <form class="text-left d-grid" method="post" action="shop-item.php?id=<?= $item["sku"];?>">
-                                        <input type="number" name="quantity" value="1" class="form-control row-cols-4">
-                                        <input type="submit" name="add-to-cart" class="btn btn-outline-dark mt-sm-2" value="Add To Cart"></a>
+                                <div class="border-top-0 bg-transparent row-cols-6">
+                                    <form class="text-left d-grid" method="post" action="index.php?action=shop_item&id=<?php echo $item['sku']; ?>">
+                                        <input type="number" name="quantity" min="1" value="1" class="form-control row-cols-4 text-center">
+                                        <input type="submit" name="add-to-cart" class="btn btn-outline-dark mt-sm-2" value="Add To Cart">
                                     </form>
                                 </div>
                             </div>
@@ -177,4 +170,4 @@ $DecreaseStock = new DecreaseStock();
 
 
 
-<?php require_once '../app/templates/footer.php'; ?>
+<?php require_once '../app/view/templates/footer.php'; ?>

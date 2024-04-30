@@ -1,32 +1,37 @@
 <?php
-session_start();
 
-if(isset($_POST['confirm-transaction'])) {
-    $orderSuccess = "Congatulations! Your order has been placed successfully. You will be notified when your order has shipped.";
-    unset($_SESSION['cart']);
-    $_SESSION['cartTotalQuantity'] = 0;
-}
+    session_start();
 
-require_once '../app/templates/header.php';
+    if(isset($_POST['confirm-transaction'])) {
 
-if(isset($_SESSION['Login'])== 'User'){
-    require_once '../app/templates/navbarUser.php';
-} elseif(isset($_SESSION['Login'])== 'Admin'){
-    require_once '../app/templates/navbarAdmin.php';
-} else {
-    require_once '../app/templates/navbar.php';
-}
+        $orderSuccess = "Congratulations! Your order has been placed successfully. You will be notified when your order has shipped.";
 
-try {
+        unset($_SESSION['cart']);
+        $_SESSION['cartTotalQuantity'] = 0;
+
+    }
+
+    require_once '../app/view/templates/header.php';
+    require_once '../app/model/products.php';
+    require_once '../app/model/users.php';
     require_once '../database/connect.php';
-    require_once '../queries/getUser.php';
+
+    if(isset($_SESSION['Login'])== 'User'){
+
+        require_once '../app/view/templates/navbarUser.php';
+
+    } elseif(isset($_SESSION['Login'])== 'Admin'){
+
+        require_once '../app/view/templates/navbarAdmin.php';
+
+    } else {
+
+        require_once '../app/view/templates/navbar.php';
+
+    }
 
     $email = $_SESSION['email'];
     $user = getUserByEmail($connection, $email);
-
-} catch(PDOException $error) {
-    echo $sql . "<br>" . $error->getMessage();
-}
 
 ?>
 
@@ -136,7 +141,7 @@ try {
                                     </table>
 
                                     <div class="d-flex flex-row-reverse">
-                                        <form class="d-grid" method="post" action="complete-purchase.php?action=transaction-confirmed">
+                                        <form class="d-grid" method="post" action="index.php?action=complete_purchase">
                                             <input type="submit" name="confirm-transaction" class="btn btn-outline-dark" value="Confirm Transaction">
                                         </form>
                                     </div>
@@ -149,4 +154,4 @@ try {
         </body>
 
 
-<?php require_once '../app/templates/footer.php'; ?>
+<?php require_once '../app/view/templates/footer.php'; ?>

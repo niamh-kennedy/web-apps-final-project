@@ -1,26 +1,45 @@
 <?php
-session_start();
 
-require_once '../app/templates/header.php';
+    session_start();
 
-require_once "../database/connect.php";
-require_once('../src/functions.php');
-$Clean = new Clean();
-$userCheck = new LoginWithDatabase();
+    require_once '../app/view/templates/header.php';
+    require_once "../database/connect.php";
+    require_once('../src/functions.php');
 
-if(isset($_SESSION['Login'])== 'User'){
+    if(isset($_SESSION['Login'])== 'User'){
 
-    require_once '../app/templates/navbarUser.php';
+        require_once '../app/view/templates/navbarUser.php';
 
-} elseif(isset($_SESSION['Login'])== 'Admin'){
+    } elseif(isset($_SESSION['Login'])== 'Admin'){
 
-    require_once '../app/templates/navbarAdmin.php';
+        require_once '../app/view/templates/navbarAdmin.php';
 
-} else {
+    } else {
 
-    require_once '../app/templates/navbar.php';
+        require_once '../app/view/templates/navbar.php';
 
-}
+    }
+
+    /* check if the login form has been submitted */
+    if(isset($_POST['Submit'])) {
+
+        $email = clean($_POST['inputEmail']);
+        $password = clean($_POST['inputPassword']);
+
+        $user = loginWithDatabase($connection, $email, $password);
+
+        if($user === true) {
+
+            header("location:index.php?action=homepage");
+            exit;
+
+        } else {
+
+            $loginFailure = 'Incorrect Username or Password. Please try again.';
+
+        }
+
+    }
 
 ?>
 
@@ -28,34 +47,6 @@ if(isset($_SESSION['Login'])== 'User'){
             <title>Login</title>
         </head>
     <body>
-
-<!-- reused code from sessions_lab-->
-<?php
-    /* check if the login form has been submitted */
-    if(isset($_POST['Submit'])) {
-
-        try {
-
-            $email      = $Clean->clean($_POST['inputEmail']);
-            $password   = $Clean->clean($_POST['inputPassword']);
-
-            $user = $userCheck->loginWithDatabase($connection, $email, $password);
-
-            if($user === true) {
-                header("location:../public/index.php");
-                exit;
-            } else {
-                $loginFailure = 'Incorrect Username or Password. Please try again.';
-            }
-
-        } catch (PDOException $error) {
-
-            echo $sql . "<br>" . $error->getMessage();
-
-        }
-    }
-
-    ?>
 
     <!-- Header-->
     <header class="bg-dark py-5">
@@ -71,13 +62,16 @@ if(isset($_SESSION['Login'])== 'User'){
     <!-- Section-->
     <section class="py-5">
         <div class="container px-5 px-lg-5 mt-1 mb-5">
+
             <?php if(isset($loginFailure)){ ?>
                 <div class="col mb-5">
                     <?php echo $loginFailure; ?>
                 </div>
             <?php } ?>
+
             <div class="row gx-4 gx-lg-5 row-cols-1 row-cols-md-2 row-cols-xl-4 justify-content-center">
                 <div class="col mb-5">
+
                     <!-- Login Form-->
                     <h5>Returning Customer</h5>
                     <form action="" method="post" name="login_form" class="login-form">
@@ -99,7 +93,7 @@ if(isset($_SESSION['Login'])== 'User'){
                     <div class="mb-3">
                         Don't have an account yet?
                     </div>
-                        <a href="../app/register.php">
+                        <a href="index.php?action=register">
                             <button class="btn btn-outline-dark">Register</button>
                         </a>
                 </div>
@@ -109,4 +103,4 @@ if(isset($_SESSION['Login'])== 'User'){
     </section>
 
 <!-- Footer-->
-<?php require_once '../app/templates/footer.php'; ?>
+<?php require_once '../app/view/templates/footer.php'; ?>
