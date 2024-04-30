@@ -11,10 +11,6 @@
 
         require_once '../app/view/templates/navbarUser.php';
 
-    } elseif(isset($_SESSION['Login'])== 'Admin'){
-
-        require_once '../app/view/templates/navbarAdmin.php';
-
     } else {
 
         require_once '../app/view/templates/navbar.php';
@@ -27,10 +23,10 @@
 
             $email = clean($_POST['inputEmail']);
             $password = clean($_POST['inputPassword']);
-            $firstName = clean($_POST['inputFirstName']);
-            $lastName = clean($_POST['inputLastName']);
-            $street = clean($_POST['inputStreet']);
-            $town = clean($_POST['inputTown']);
+            $firstName = ucfirst(clean($_POST['inputFirstName']));
+            $lastName = ucfirst(clean($_POST['inputLastName']));
+            $street = ucfirst(clean($_POST['inputStreet']));
+            $town = ucfirst(clean($_POST['inputTown']));
             $contactNum = clean($_POST['inputContactNum']);
 
             createUser($connection, $email, $password, $firstName, $lastName, $street, $town, $contactNum);
@@ -103,7 +99,7 @@
                             </div>
                             <div class="col-md-4">
                                 <label for="inputContactNum">Contact Number</label>
-                                <input name="inputContactNum" type="text" class="form-control" id="inputContactNum" placeholder="012 345 6789" required>
+                                <input name="inputContactNum" type="number" class="form-control" id="inputContactNum" placeholder="012 345 6789" required>
                             </div>
                         </div>
                         <div class="col-md-12">

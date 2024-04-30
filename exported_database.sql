@@ -1,30 +1,30 @@
-CREATE DATABASE final_project;
+CREATE DATABASE ch_cosmetics;
 
-USE final_project;
+USE ch_cosmetics;
 
 /* table "users" stores user login credentials and delivery information */
 CREATE TABLE IF NOT EXISTS users (
-                       id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-                       email VARCHAR(60) NOT NULL,
-                       password VARCHAR(30) NOT NULL,
-                       firstName VARCHAR(30) NOT NULL,
-                       lastName VARCHAR(30) NOT NULL,
-                       street VARCHAR(30) NOT NULL,
-                       town VARCHAR(30) NOT NULL,
-                       contactNum VARCHAR(30) NOT NULL
+                                     id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                                     email VARCHAR(60) NOT NULL,
+                                     password VARCHAR(30) NOT NULL,
+                                     firstName VARCHAR(30) NOT NULL,
+                                     lastName VARCHAR(30) NOT NULL,
+                                     street VARCHAR(30) NOT NULL,
+                                     town VARCHAR(30) NOT NULL,
+                                     contactNum VARCHAR(30) NOT NULL
 );
 
 /* default admin account created. */
-INSERT INTO users (email, password, firstName) VALUES ('admin@brand.com', 'admin', 'admin');
+INSERT INTO users (email, password, firstName, lastName, street, town, contactNum) VALUES ('admin@brand.com', 'admin', 'admin', 'admin', 'admin', 'admin', 0);
 
 /* table "warehouse" stores products sold by website and associated data */
 CREATE TABLE IF NOT EXISTS warehouse (
-                           sku INT(15) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-                           productName VARCHAR(60) NOT NULL,
-                           productCategory VARCHAR(30) NOT NULL,
-                           productDesc VARCHAR(400),
-                           productPrice DECIMAL(10, 2) NOT NULL,
-                           totalStock INT(10) NOT NULL
+                                         sku INT(15) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                                         productName VARCHAR(60) NOT NULL,
+                                         productCategory VARCHAR(30) NOT NULL,
+                                         productDesc VARCHAR(400),
+                                         productPrice DECIMAL(10, 2) NOT NULL,
+                                         totalStock INT(10) NOT NULL
 );
 
 /* inserting default table values */

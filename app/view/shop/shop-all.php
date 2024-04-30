@@ -9,10 +9,6 @@
 
         require_once '../app/view/templates/navbarUser.php';
 
-    } elseif(isset($_SESSION['Login']) && ($_SESSION['Login']) == 'Admin'){
-
-        require_once '../app/view/templates/navbarAdmin.php';
-
     } else {
 
         require_once '../app/view/templates/navbar.php';

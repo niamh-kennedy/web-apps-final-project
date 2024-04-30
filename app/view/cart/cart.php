@@ -31,9 +31,7 @@
 
     }
 
-    if (isset($_POST['edit'])) {
 
-    }
 
     require_once '../app/view/templates/header.php';
     require_once '../app/view/templates/navbarUser.php';

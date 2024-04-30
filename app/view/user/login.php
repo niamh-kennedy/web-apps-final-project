@@ -10,10 +10,6 @@
 
         require_once '../app/view/templates/navbarUser.php';
 
-    } elseif(isset($_SESSION['Login'])== 'Admin'){
-
-        require_once '../app/view/templates/navbarAdmin.php';
-
     } else {
 
         require_once '../app/view/templates/navbar.php';
@@ -30,8 +26,8 @@
 
         if ($user == true) {
 
-            header("location:index.php?action=homepage");
-            exit;
+                header("location:index.php?action=homepage");
+                exit;
 
         } else {
 

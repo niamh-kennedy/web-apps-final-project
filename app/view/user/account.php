@@ -12,13 +12,10 @@
 
         require_once '../app/view/templates/navbarUser.php';
 
-    } elseif(isset($_SESSION['Login'])== 'Admin'){
-
-        require_once '../app/view/templates/navbarAdmin.php';
-
     } else {
 
-        require_once '../app/view/templates/navbar.php';
+        header("location:login.php");
+        exit;
 
     }
 
@@ -29,10 +26,10 @@ if (isset($_POST['Update'])) {
 
         $email = clean($_POST['inputEmail']);
         $password = clean($_POST['inputPassword']);
-        $firstName = clean($_POST['inputFirstName']);
-        $lastName = clean($_POST['inputLastName']);
-        $street = clean($_POST['inputStreet']);
-        $town = clean($_POST['inputTown']);
+        $firstName = ucfirst(clean($_POST['inputFirstName']));
+        $lastName = ucfirst(clean($_POST['inputLastName']));
+        $street = ucfirst(clean($_POST['inputStreet']));
+        $town = ucfirst(clean($_POST['inputTown']));
         $contactNum = clean($_POST['inputContactNum']);
 
         updateUser($connection, $id, $email, $password, $firstName, $lastName, $street, $town, $contactNum);
@@ -100,7 +97,7 @@ if (isset($_SESSION['email'])) {
             <div class="col-lg-6">
                 <?php if (isset($_POST['Update']) && $userUpdated) : ?>
                     <div class="col-lg-6 pb-xl-4">
-                        <em><?php echo ($_POST['inputFirstName']); ?> successfully updated.</em>
+                        <em><?php echo $firstName; ?> successfully updated.</em>
                     </div>
                 <?php endif; ?>
                 <form method="post">
@@ -138,7 +135,7 @@ if (isset($_SESSION['email'])) {
                         </div>
                         <div class="col-md-4">
                             <label for="inputContactNum">Contact Number</label>
-                            <input name="inputContactNum" type="text" class="form-control" id="inputContactNum" value="<?php echo ($user["contactNum"]);?>" required>
+                            <input name="inputContactNum" type="number" class="form-control" id="inputContactNum" value="<?php echo ($user["contactNum"]);?>" required>
                         </div>
                     </div>
                     <div class="col-md-12">

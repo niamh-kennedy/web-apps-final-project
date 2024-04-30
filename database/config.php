@@ -7,7 +7,7 @@
 $host = "localhost";
 $username = "root";
 $password = "root";
-$dbname = "final_project";
+$dbname = "ch_cosmetics";
 $dsn = "mysql:host=$host;dbname=$dbname";
 $options = array(
     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION

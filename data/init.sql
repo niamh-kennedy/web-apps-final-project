@@ -1,6 +1,6 @@
-CREATE DATABASE final_project;
+CREATE DATABASE ch_cosmetics;
 
-USE final_project;
+USE ch_cosmetics;
 
 /* table "users" stores user login credentials and delivery information */
 CREATE TABLE IF NOT EXISTS users (
@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS users (
 );
 
 /* default admin account created. */
-INSERT INTO users (email, password, firstName) VALUES ('admin@brand.com', 'admin', 'admin');
+INSERT INTO users (email, password, firstName, lastName, street, town, contactNum) VALUES ('admin@brand.com', 'admin', 'admin', 'admin', 'admin', 'admin', 0);
 
 /* table "warehouse" stores products sold by website and associated data */
 CREATE TABLE IF NOT EXISTS warehouse (
