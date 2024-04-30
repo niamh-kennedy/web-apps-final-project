@@ -28,7 +28,7 @@
 
         $user = loginWithDatabase($connection, $email, $password);
 
-        if ($user === true) {
+        if ($user == true) {
 
             header("location:index.php?action=homepage");
             exit;

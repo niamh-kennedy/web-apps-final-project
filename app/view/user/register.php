@@ -85,25 +85,25 @@
                         <div class="row gy-3 gy-md-4 py-xl-1 pb-xl-2 overflow-hidden">
                             <div class="col-md-6">
                                 <label for="inputFirstName">First Name</label>
-                                <input name="inputFirstName" type="text" class="form-control" id="inputFirstName" placeholder="First Name">
+                                <input name="inputFirstName" type="text" class="form-control" id="inputFirstName" placeholder="First Name" required>
                             </div>
                             <div class="col-md-6">
                                 <label for="inputLastName">Last Name</label>
-                                <input name="inputLastName" type="text" class="form-control" id="inputLastName" placeholder="Last Name">
+                                <input name="inputLastName" type="text" class="form-control" id="inputLastName" placeholder="Last Name" required>
                             </div>
                         </div>
                         <div class="row gy-3 gy-md-4 py-xl-1 pb-xl-4 overflow-hidden">
                             <div class="col-md-4">
                                 <label for="inputStreet">Street</label>
-                                <input name="inputStreet" type="text" class="form-control" id="inputStreet" placeholder="Street">
+                                <input name="inputStreet" type="text" class="form-control" id="inputStreet" placeholder="Street" required>
                             </div>
                             <div class="col-md-4">
                                 <label for="inputTown">Town</label>
-                                <input name="inputTown" type="text" class="form-control" id="inputTown" placeholder="Town">
+                                <input name="inputTown" type="text" class="form-control" id="inputTown" placeholder="Town" required>
                             </div>
                             <div class="col-md-4">
                                 <label for="inputContactNum">Contact Number</label>
-                                <input name="inputContactNum" type="text" class="form-control" id="inputContactNum" placeholder="012 345 6789">
+                                <input name="inputContactNum" type="text" class="form-control" id="inputContactNum" placeholder="012 345 6789" required>
                             </div>
                         </div>
                         <div class="col-md-12">

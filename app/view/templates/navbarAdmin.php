@@ -19,16 +19,19 @@
                 </li>
             </ul>
 
+
+            <!-- if logged in, show user profile button using $firstName and logout button
+                if not logged in, show login button -->
+
             <form class="d-flex pe-3">
-                <a class="btn btn-outline-dark" href="index.php?action=login" type="submit">
-                    <i class="bi-cart-fill me-1"></i>
-                    Cart
-                    <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
+                <a class="btn btn-outline-dark" href="index.php?action=warehouse" type="submit">
+                    Warehouse
                 </a>
             </form>
+
             <form class="d-flex">
-                <a class="btn btn-outline-dark" href="index.php?action=login" type="submit">
-                    Login
+                <a class="btn btn-outline-dark" href="index.php?action=logout" type="submit">
+                    Logout
                 </a>
             </form>
         </div>
